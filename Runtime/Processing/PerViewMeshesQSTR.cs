@@ -6,6 +6,7 @@
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEditor;
 using COLIBRIVR.Rendering;
@@ -443,6 +444,48 @@ namespace COLIBRIVR.Processing
         }
 
         /// <summary>
+        /// Exports the created mesh as obj file.
+        /// </summary>
+        /// <param name="inputMesh"></param> Input mesh to be saved as obj file. 
+        /// <param name="filename"></param> File path to save obj file. 
+        private void exportMeshObj(Mesh inputMesh, string filename)
+        {
+            Mesh m = inputMesh;
+
+            // Generate mesh string.
+            StringBuilder sb = new StringBuilder();
+            // for vertices.
+            foreach(Vector3 v in m.vertices) {
+                sb.Append(string.Format("v {0} {1} {2}\n",v.x,v.y,v.z));
+            }
+            sb.Append("\n");
+            // for normals.
+            foreach(Vector3 v in m.normals) {
+                sb.Append(string.Format ("vn {0} {1} {2}\n",v.x,v.y,v.z));
+            }
+            sb.Append("\n");
+
+            // for uv map.
+            foreach(Vector3 v in m.uv) {
+                sb.Append(string.Format("vt {0} {1}\n",v.x,v.y));
+            }
+            for (int material=0; material <m.subMeshCount; material ++) {
+                sb.Append("\n");
+                int[] triangles = m.GetTriangles(material);
+                for (int i=0;i< triangles.Length;i+=3) {
+                    sb.Append(string.Format("f {0}/{0}/{0} {1}/{1}/{1} {2}/{2}/{2}\n",
+                        triangles[i]+1, triangles[i+1]+1,triangles[i+2]+1));
+                }
+            }
+
+            // Save mesh string as obj file.
+            using (StreamWriter sw = new StreamWriter(filename))
+            {
+                sw.Write(sb.ToString());
+            }
+        }
+
+        /// <summary>
         /// Releases the different buffers that were created during the mesh generation process (to be used once per generated mesh).
         /// </summary>
         private void ReleasePerMesh()
@@ -533,6 +576,9 @@ namespace COLIBRIVR.Processing
             // Compute a mesh from the distance map.
             Mesh outMesh;
             ComputeMesh(out outMesh);
+            // Save this mesh as obj file.
+            string objPath = "C:\\omnimesh.obj";
+            exportMeshObj(outMesh, objPath);
             // Save this mesh as an asset.
             AssetDatabase.CreateAsset(outMesh, meshRelativePath);
             AssetDatabase.Refresh();
