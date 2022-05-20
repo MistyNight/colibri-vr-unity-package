@@ -455,7 +455,7 @@ namespace COLIBRIVR.Processing
             // Generate mesh string.
             StringBuilder sb = new StringBuilder();
             // for MTL file
-            sb.Append(string.Format("mtllib omnimesh.mtl\n"))
+            sb.Append(string.Format("mtllib omnimesh.mtl\n"));
             // for vertices.
             foreach(Vector3 v in m.vertices) {
                 sb.Append(string.Format("v {0} {1} {2}\n",v.x,v.y,v.z));
