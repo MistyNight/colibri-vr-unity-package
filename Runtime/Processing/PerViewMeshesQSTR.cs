@@ -579,7 +579,7 @@ namespace COLIBRIVR.Processing
             Mesh outMesh;
             ComputeMesh(out outMesh);
             // Save this mesh as obj file.
-            string objRelativePath = Path.Combine(GeneralToolkit.tempDirectoryRelativePath, "omnimesh.obj");
+            string objRelativePath = Path.Combine(dataHandler.depthDirectory, "omnimesh.obj");
             exportMeshObj(outMesh, objRelativePath);
             // Save this mesh as an asset.
             AssetDatabase.CreateAsset(outMesh, meshRelativePath);
