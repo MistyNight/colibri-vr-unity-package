@@ -189,7 +189,8 @@ namespace COLIBRIVR
             _omnidirectionalPixelResolution = new Vector2Int(512, 256);
             _perspectivePixelResolution = new Vector2Int(128, 128);
             _perspectiveFOV = new Vector2(60f, 60f);
-            distanceRange = new Vector2(0.3f, 1000f);
+            // distanceRange = new Vector2(0.3f, 1000f); // Original default range of COLIBRI VR.
+            distanceRange = new Vector2(1f, 650f); // Range for NL streetview.
             SetCameraReferenceIndexAndImageName(1, string.Empty);
             meshRenderer = GeneralToolkit.GetOrAddComponent<MeshRenderer>(gameObject);
             imageURL = string.Empty;
